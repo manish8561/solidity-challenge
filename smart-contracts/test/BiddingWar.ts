@@ -209,5 +209,23 @@ describe("BiddingWar", () => {
         ).to.equal(0);
       });
     });
+    describe("Sending ether to the contract direcetly", () => {
+      it("Should run the receive function", async () => {
+        const { biddingWar, owner, otherAccount } = await loadFixture(
+          deployBiddingWarFixture
+        );
+        // sending ethers directly to the contract address
+        const value = 100;
+        const data = {
+          value,
+          to: biddingWar.target
+        }
+        await expect(owner.sendTransaction(data)).not.to.be.reverted;
+
+        expect(
+          await hre.ethers.provider.getBalance(biddingWar.target)
+        ).to.equal(0);
+      });
+    });
   });
 });

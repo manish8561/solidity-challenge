@@ -106,7 +106,7 @@ contract BiddingWar is Ownable, ReentrancyGuard {
             }
             // payable(highestBidder).transfer(winAmt);
             // recommended method to sent ether
-            (bool sent,) = payable(highestBidder).call{value: winAmt}("");
+            (bool sent, ) = payable(highestBidder).call{value: winAmt}("");
             require(sent, "Failed to send Ether");
             emit WinEvent(
                 bidCounter,
@@ -124,7 +124,8 @@ contract BiddingWar is Ownable, ReentrancyGuard {
      * common function to transfer fund to owner
      */
     function fundsTransferToOwner() private {
-        payable(owner()).transfer(msg.value);
+        (bool sent, ) = payable(owner()).call{value: msg.value}("");
+        require(sent, "Failed to send Ether");
     }
 
     receive() external payable {
